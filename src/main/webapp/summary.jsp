@@ -1,5 +1,5 @@
 
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/jspf/declarativemethods.jspf" %>
 <%@page import="edu.nbcc.student.Student"%>
@@ -26,6 +26,22 @@
         <%@include file="/WEB-INF/jspf/navigation.jspf" %>
         <h1>All Dev Teams</h1>
         <div class="container">
+        <%
+        
+        	if(request.getParameter("btnClear") != null){
+        		session.removeAttribute("teams");
+        	}
+        	Vector<Vector<Student>> studentTeams = new Vector();
+			if(session.getAttribute("teams") != null){
+				studentTeams = (Vector<Vector<Student>>)session.getAttribute("teams");
+			}
+        	
+       	%>
+            
+            <% if(studentTeams.size() > 0){
+            	int teamNo = 1;
+            
+           	%>
             
             <table class="table table-striped">
                 <tr>
@@ -39,12 +55,31 @@
                         Last Name
                     </th>
                 </tr>
-
+                <%for (Vector<Student> t: studentTeams){
+                	for(Student s: t){              		               	              
+                %>
+	                 <tr>
+	                    <th>
+	                        <%=teamNo %>
+	                    </th>
+	                    <th>
+	                        <%=s.getFirstName() %>
+	                    </th>
+	                    <th>
+	                        <%=s.getLastName() %>
+	                    </th>
+	                </tr>
+				<%} 
+                	teamNo++;
+                }%>
                
             </table>
             <form method="post">
                 <button class="btn btn-primary" name="btnClear">Clear Teams</button>                
             </form>
+            <%} else{ %>
+            <h2>No teams</h2>
+            <%} %>
             
         </div>
 
